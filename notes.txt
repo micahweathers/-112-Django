@@ -1,0 +1,12 @@
+----For blog----
+cd blog
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install django
+
+pip freeze > requirements.txt
+
+django-admin startproject config . //Make sure to add the '.'
