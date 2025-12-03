@@ -3,12 +3,33 @@
 {% block title %}All Posts{% endblock %}
 
 {% block content %}
-<h1 class="centered">All Posts</h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1>All Posts</h1>
+    
+    {% if user.is_authenticated %}
+    <div class="filter-dropdown">
+        <label for="post-filter" style="margin-right: 0.5rem; color: #667eea; font-weight: 600;">Filter:</label>
+        <select id="post-filter" class="filter-select" onchange="window.location.href='?filter=' + this.value">
+            <option value="all" {% if current_filter == 'all' %}selected{% endif %}>All Posts</option>
+            <option value="my_posts" {% if current_filter == 'my_posts' %}selected{% endif %}>My Posts</option>
+            <option value="drafts" {% if current_filter == 'drafts' %}selected{% endif %}>My Drafts</option>
+            <option value="archived" {% if current_filter == 'archived' %}selected{% endif %}>My Archived</option>
+        </select>
+    </div>
+    {% endif %}
+</div>
 
 <ul style="list-style: none; padding: 0;">
     {% for post in posts %}
     <li class="post-card">
-        <h3><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></h3>
+        <h3>
+            <a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a>
+            {% if post.status.name == 'Draft' %}
+            <span class="status-badge draft-badge">DRAFT</span>
+            {% elif post.status.name == 'Archived' %}
+            <span class="status-badge archived-badge">ARCHIVED</span>
+            {% endif %}
+        </h3>
         <p class="text-muted">Posted by: {{ post.author }} | {{ post.created_on|date:"F d, Y" }} | Status: {{ post.status }}</p>
         <p>{{ post.subtitle }}</p>
         <div style="margin-top: 1rem;">
@@ -16,7 +37,9 @@
         </div>
     </li>
     {% empty %}
-    <!-- Mock posts when no real posts exist -->
+    <!-- Show different messages based on filter -->
+    {% if show_mock_posts %}
+    <!-- Mock posts only when viewing "All Posts" and no real posts exist -->
     <li class="post-card">
         <h3><a href="#">Welcome to My Blog</a></h3>
         <p class="text-muted">Posted by: Admin | December 1, 2025 | Status: Published</p>
@@ -43,6 +66,13 @@
             <a href="#" class="btn btn-primary btn-sm">Read More</a>
         </div>
     </li>
+    {% elif current_filter == 'my_posts' %}
+    <p class="text-muted centered">You haven't published any posts yet.</p>
+    {% elif current_filter == 'drafts' %}
+    <p class="text-muted centered">You don't have any drafts.</p>
+    {% elif current_filter == 'archived' %}
+    <p class="text-muted centered">You don't have any archived posts.</p>
+    {% endif %}
     {% endfor %}
 </ul>
 

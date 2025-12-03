@@ -15,7 +15,30 @@
     {% if user.is_authenticated and user == post.author %}
     <div class="post-actions-detail">
         <a href="{% url 'posts:list' %}" class="btn btn-secondary">Back to Posts</a>
-        <a href="{% url 'posts:update' post.pk %}" class="btn btn-warning">Edit Post</a>
+        <a href="{% url 'posts:update' post.pk %}" class="btn btn-success">Edit Post</a>
+        
+        {% if post.status.name == 'Published' %}
+        <!-- Archive button only for Published posts -->
+        <form method="post" action="{% url 'posts:update' post.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="title" value="{{ post.title }}">
+            <input type="hidden" name="subtitle" value="{{ post.subtitle }}">
+            <input type="hidden" name="body" value="{{ post.body }}">
+            <input type="hidden" name="archive_post" value="true">
+            <button type="submit" class="btn btn-warning">Archive Post</button>
+        </form>
+        {% elif post.status.name == 'Archived' %}
+        <!-- Unarchive button only for Archived posts -->
+        <form method="post" action="{% url 'posts:update' post.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="title" value="{{ post.title }}">
+            <input type="hidden" name="subtitle" value="{{ post.subtitle }}">
+            <input type="hidden" name="body" value="{{ post.body }}">
+            <input type="hidden" name="unarchive_post" value="true">
+            <button type="submit" class="btn btn-info">Unarchive Post</button>
+        </form>
+        {% endif %}
+        
         <a href="{% url 'posts:delete' post.pk %}" class="btn btn-danger">Delete Post</a>
     </div>
     {% else %}
@@ -23,5 +46,57 @@
         <a href="{% url 'posts:list' %}" class="btn btn-secondary">Back to Posts</a>
     </div>
     {% endif %}
+
+    <hr style="margin: 2rem 0; border-color: rgba(102, 126, 234, 0.3);">
+
+    <!-- COMMENTS SECTION -->
+    <div class="comments-section">
+        <h2>Comments</h2>
+        
+        <!-- Display existing comments -->
+        {% if comments %}
+        <div class="comments-list">
+            {% for comment in comments %}
+            <div class="comment-item">
+                <p class="comment-author">{{ comment.author }} - {{ comment.created_on|date:"F d, Y" }}</p>
+                <p class="comment-body">{{ comment.body }}</p>
+                {% if user.is_authenticated and user == comment.author %}
+                <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                    <a href="{% url 'posts:comment_edit' comment.pk %}" class="btn btn-success btn-sm">Edit</a>
+                    <a href="{% url 'posts:comment_delete' comment.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No comments yet. Be the first to comment!</p>
+        {% endif %}
+
+        <!-- Add new comment form -->
+        <div class="comment-form">
+            <h3>Leave a Comment</h3>
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="post-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p class="helptext">{{ field.help_text|striptags }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                    <span class="errorlist">{{ field.errors }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="post-actions centered">
+                    <button type="submit" class="btn btn-success">Submit Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
