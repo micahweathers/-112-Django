@@ -1,26 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %}Post Detail{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
 <div class="post-detail-container">
-    <h1>My First Blog Post</h1>
-    <p class="text-muted">Posted by: Admin | November 30, 2025</p>
+    <h1>{{ post.title }}</h1>
+    <p class="text-muted">Posted by: {{ post.author }} | {{ post.created_on|date:"F d, Y" }} | Status: {{ post.status }}</p>
     
     <div class="post-body">
-        <p>This is my very first blog post! I'm learning Django and it's amazing how easy it is to build web applications.</p>
-        
-        <p>Django makes it so simple to handle user authentication, create beautiful templates, and manage data with models. I can't believe how much I've learned in just a few weeks!</p>
-        
-        <p>The best part is using Django's built-in features like UserCreationForm and authentication views. It saves so much time compared to building everything from scratch.</p>
-        
-        <p>I'm excited to continue learning more advanced topics like custom user models, permissions, and building a full CRUD application!</p>
+        <h3>{{ post.subtitle }}</h3>
+        <p>{{ post.body }}</p>
     </div>
 
+    {% if user.is_authenticated and user == post.author %}
     <div class="post-actions-detail">
         <a href="{% url 'posts:list' %}" class="btn btn-secondary">Back to Posts</a>
-        <a href="#" class="btn btn-warning">Edit Post</a>
-        <a href="#" class="btn btn-danger">Delete Post</a>
+        <a href="{% url 'posts:update' post.pk %}" class="btn btn-warning">Edit Post</a>
+        <a href="{% url 'posts:delete' post.pk %}" class="btn btn-danger">Delete Post</a>
     </div>
+    {% else %}
+    <div class="post-actions-detail">
+        <a href="{% url 'posts:list' %}" class="btn btn-secondary">Back to Posts</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

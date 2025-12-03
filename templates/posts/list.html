@@ -6,37 +6,49 @@
 <h1 class="centered">All Posts</h1>
 
 <ul style="list-style: none; padding: 0;">
+    {% for post in posts %}
     <li class="post-card">
-        <h3><a href="#">My First Blog Post</a></h3>
-        <p class="text-muted">Posted by: Admin | November 30, 2025</p>
-        <p>This is my very first blog post! I'm learning Django and it's amazing how easy it is to build web applications.</p>
+        <h3><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></h3>
+        <p class="text-muted">Posted by: {{ post.author }} | {{ post.created_on|date:"F d, Y" }} | Status: {{ post.status }}</p>
+        <p>{{ post.subtitle }}</p>
+        <div style="margin-top: 1rem;">
+            <a href="{% url 'posts:detail' post.pk %}" class="btn btn-primary btn-sm">Read More</a>
+        </div>
+    </li>
+    {% empty %}
+    <!-- Mock posts when no real posts exist -->
+    <li class="post-card">
+        <h3><a href="#">Welcome to My Blog</a></h3>
+        <p class="text-muted">Posted by: Admin | December 1, 2025 | Status: Published</p>
+        <p>This is a sample post to show you what blog posts will look like. Create your first post to get started!</p>
         <div style="margin-top: 1rem;">
             <a href="#" class="btn btn-primary btn-sm">Read More</a>
-            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-            <a href="#" class="btn btn-danger btn-sm">Delete</a>
         </div>
     </li>
 
     <li class="post-card">
-        <h3><a href="#">Learning Authentication</a></h3>
-        <p class="text-muted">Posted by: Micah | November 29, 2025</p>
-        <p>Today I learned how to implement user authentication in Django. Login, logout, and signup are all working perfectly!</p>
+        <h3><a href="#">Getting Started with Django</a></h3>
+        <p class="text-muted">Posted by: Admin | November 30, 2025 | Status: Published</p>
+        <p>Learn how to build powerful web applications with Django. This post covers the basics of models, views, and templates.</p>
         <div style="margin-top: 1rem;">
             <a href="#" class="btn btn-primary btn-sm">Read More</a>
-            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-            <a href="#" class="btn btn-danger btn-sm">Delete</a>
         </div>
     </li>
 
     <li class="post-card">
-        <h3><a href="#">CSS is Fun!</a></h3>
-        <p class="text-muted">Posted by: Micah | November 28, 2025</p>
-        <p>Creating a bubbly theme with CSS gradients and rounded corners. The purple gradient looks amazing!</p>
+        <h3><a href="#">Building Beautiful UIs</a></h3>
+        <p class="text-muted">Posted by: Admin | November 29, 2025 | Status: Published</p>
+        <p>Discover how to create stunning user interfaces with custom CSS and modern design principles.</p>
         <div style="margin-top: 1rem;">
             <a href="#" class="btn btn-primary btn-sm">Read More</a>
-            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-            <a href="#" class="btn btn-danger btn-sm">Delete</a>
         </div>
     </li>
+    {% endfor %}
 </ul>
+
+{% if user.is_authenticated %}
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="{% url 'posts:new' %}" class="btn btn-success btn-lg">Create New Post</a>
+</div>
+{% endif %}
 {% endblock %}
