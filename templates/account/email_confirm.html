@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Email{% endblock %}
+
+{% block content %}
+<div class="post-form-container narrow">
+    <h1 class="centered">Confirm Email Address</h1>
+    
+    {% if confirmation %}
+        <p style="text-align: center; color: #4a5568; margin: 2rem 0;">
+            Please confirm that <strong style="color: #667eea;">{{ confirmation.email_address.email }}</strong> is your email address.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="post-actions centered">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    {% else %}
+        <p style="text-align: center; color: #f56565; margin: 2rem 0;">
+            This confirmation link has expired or is invalid.
+        </p>
+        <div class="post-actions centered">
+            <a href="{% url 'account_login' %}" class="btn btn-primary">Back to Login</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

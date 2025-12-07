@@ -10,14 +10,15 @@
                 <li><a href="{% url 'posts:list' %}">POSTS</a></li>
                 <li><a href="#">{{ user.username }}</a></li>
                 <li>
-                    <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+                    <form method="post" action="{% url 'account_logout' %}" style="display: inline; margin: 0;">
                         {% csrf_token %}
                         <button type="submit" class="blog-logout-btn">LOGOUT</button>
                     </form>
                 </li>
             {% else %}
                 <!-- Show these links when user is NOT logged in -->
-                <li><a href="{% url 'login' %}">LOGIN</a></li>
+                <li><a href="{% url 'account_login' %}">LOGIN</a></li>
+                <li><a href="{% url 'account_signup' %}">SIGN UP</a></li>
             {% endif %}
         </ul>
     </div>

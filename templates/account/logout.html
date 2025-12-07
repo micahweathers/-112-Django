@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+<div class="post-form-container narrow">
+    <h1 class="centered">Sign Out</h1>
+    <p style="text-align: center; color: #4a5568; margin: 2rem 0;">Are you sure you want to sign out?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="post-actions centered">
+            <button type="submit" class="btn btn-danger">Yes, Sign Out</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
