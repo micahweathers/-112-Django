@@ -1,24 +1,42 @@
 {% extends 'base.html' %}
+{% load allauth %}
 
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
 <div class="post-form-container">
     <h1 class="centered">Sign Up</h1>
-    <form method="post">
+    
+    {% if form.non_field_errors %}
+        <div style="background: #fee; border: 1px solid #f56565; padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+            {% for error in form.non_field_errors %}
+                <p style="color: #c53030; margin: 0;">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
+        
         {% for field in form %}
             <div class="post-field">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
+                
                 {% if field.help_text %}
-                    <p class="helptext">{{ field.help_text|striptags }}</p>
+                    <div class="password-requirements">
+                        {{ field.help_text|safe }}
+                    </div>
                 {% endif %}
-                {% for error in field.errors %}
-                    <span style="color: #f56565; font-size: 0.85rem; display: block; margin-top: 0.5rem;">{{ error }}</span>
-                {% endfor %}
+                
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span style="color: #f56565; font-size: 0.85rem; display: block; margin-top: 0.5rem;">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
             </div>
         {% endfor %}
+        
         <div class="post-actions centered">
             <button type="submit" class="btn btn-primary">Create Account</button>
             <a href="{% url 'account_login' %}" class="btn btn-secondary">Already have an account?</a>

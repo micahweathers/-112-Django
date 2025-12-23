@@ -4,6 +4,45 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Home Page</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, minima deserunt molestias eligendi quidem eum veniam iusto porro libero est, voluptates suscipit dignissimos molestiae.</p>
+<div class="hero-section">
+    <h1>Welcome to My Blog</h1>
+    <p>A space for sharing thoughts, ideas, and stories. Join the community and start your journey today.</p>
+    
+    {% if not user.is_authenticated %}
+        <div class="hero-buttons">
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Get Started</a>
+            <a href="{% url 'account_login' %}" class="btn btn-secondary">Sign In</a>
+        </div>
+    {% else %}
+        <div class="hero-buttons">
+            <a href="{% url 'posts:new' %}" class="btn btn-primary">Create Your First Post</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="page-content">
+    <h2 class="page-section-title">Latest from the Community</h2>
+    
+    {% if not user.is_authenticated %}
+        <div class="cta-box">
+            <h3>👋 Ready to Share Your Story?</h3>
+            <p>Create an account to start writing, connect with readers, and be part of our growing community.</p>
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Create Free Account</a>
+        </div>
+    {% endif %}
+    
+    <div class="feature-box">
+        <h3>Why Join Our Community?</h3>
+        <ul class="feature-list">
+            <li><strong>✍️ Write Freely:</strong> Share your thoughts with our supportive community</li>
+            <li><strong>💾 Draft Mode:</strong> Work on posts privately before publishing</li>
+            <li><strong>🎨 Express Yourself:</strong> Add images and format your posts your way</li>
+            <li><strong>🔒 Your Content, Your Control:</strong> Edit or delete your posts anytime</li>
+        </ul>
+    </div>
+    
+    <div class="browse-link">
+        <p><a href="{% url 'posts:list' %}">Browse All Posts →</a></p>
+    </div>
+</div>
 {% endblock %}

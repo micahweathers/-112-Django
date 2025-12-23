@@ -1,8 +1,58 @@
 {% extends 'base.html' %}
 
-{% block title %}About Me{% endblock %}
+{% block title %}About{% endblock %}
 
 {% block content %}
-    <h1>About Me</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis ducimus tempora dolorem reprehenderit soluta quam asperiores repellat a est maxime quae impedit accusamus consequatur nostrum praesentium.</p>
+<div class="page-content">
+    <div class="page-header">
+        <h1>About This Blog</h1>
+        <p>A platform for sharing ideas, stories, and perspectives</p>
+    </div>
+    
+    <div class="mission-box">
+        <h2>Our Mission</h2>
+        <p>This blog was created as a space where writers can share their thoughts, experiences, and creativity 
+        without barriers. Whether you're documenting your journey, exploring new ideas, or simply expressing 
+        yourself, this platform is designed to make writing and sharing accessible to everyone.</p>
+        <p>We believe in the power of words to connect people, spark conversations, and inspire change. 
+        Every post here represents someone's unique perspective, and we're honored to host those stories.</p>
+    </div>
+    
+    <div class="differences-box">
+        <h2>What Makes Us Different</h2>
+        <div class="difference-grid">
+            <div class="difference-item">
+                <h3>🎯 Focus on Writing</h3>
+                <p>Clean, distraction-free interface that puts your content first. No clutter, no ads, 
+                just your words and ideas.</p>
+            </div>
+            <div class="difference-item">
+                <h3>💡 Draft & Publish</h3>
+                <p>Work on your posts privately until they're ready. Switch between draft and published 
+                status anytime you want.</p>
+            </div>
+            <div class="difference-item">
+                <h3>🔒 Your Content, Your Rules</h3>
+                <p>Full control over your posts. Edit, update, or delete your content whenever you choose. 
+                No complicated permissions or approval processes.</p>
+            </div>
+            <div class="difference-item">
+                <h3>👥 Community Driven</h3>
+                <p>Built by writers, for writers. This platform was created to solve real problems that 
+                content creators face every day.</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if not user.is_authenticated %}
+    <div class="final-cta">
+        <h3>Ready to Start Writing?</h3>
+        <p>Join our community and share your story with the world.</p>
+        <div class="final-cta-buttons">
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Create Free Account</a>
+            <a href="{% url 'posts:list' %}" class="btn btn-secondary">Browse Posts</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
